@@ -78,5 +78,4 @@ Rating.propTypes = {
   text: propTypes.string.isRequired,
   color: propTypes.string,
 }
-
 export default Rating
