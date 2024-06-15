@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {
@@ -9,19 +9,26 @@ import {
   Card,
   Button,
   ListGroupItem,
+  Form
 } from 'react-bootstrap'
 import { listProductDetails } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Rating from '../components/Rating'
 
-const ProductScreen = ({match}) => {
+const ProductScreen = ({history, match}) => {
+  const [qty, setQty] = useState(1)
   const dispatch = useDispatch()
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
   useEffect(() => {
     dispatch(listProductDetails(match.params.id))
   }, [dispatch, match])
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`)
+  }
+
   return (
     <>
       <Link className='btn btn-dark my-3' to='/'>
@@ -68,7 +75,17 @@ const ProductScreen = ({match}) => {
                     </Row>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <Button className='btn-block' type='button' disabled={product.countInStock === 0}>Add To Cart</Button>
+                    <Row>
+                      <Col>Quantity</Col>
+                      <Col>
+                        <Form.Control as='select' value={qty} onChange={(e) => setQty(e.target.value)}>
+                          {[...Array(product.countInStock).keys()].map(i => (<option key={i + 1} value={i + 1}> { i + 1 } </option>))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Button onClick={addToCartHandler} className='btn-block' type='button' disabled={product.countInStock === 0}>Add To Cart</Button>
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
