@@ -52,7 +52,7 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
-//@desc    Get the details of the user who successfully logged in
+//@desc    get the details of the user who successfully logged in
 //@route   GET/api/users/profile
 //@access  private
 const getUserProfile = asyncHandler(async (req, res) => {
@@ -70,4 +70,32 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { registerUser, authUser, getUserProfile }
+//@desc    update user profile
+//@route   PUT/api/users/profile
+//@access  private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  //Get updated information
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    if (req.body.password) {
+      user.password = req.body.password
+    }
+    const updateUser = await user.save()
+    //Return updated user information
+    res.json({
+      _id: updateUser._id,
+      name: updateUser.name,
+      email: updateUser.email,
+      isAdmin: updateUser.isAdmin,
+      token: generateToken(updateUser._id),
+    })
+  } else {
+    res.status(404)
+    throw new Error('User does not exist')
+  }
+})
+
+export { registerUser, authUser, getUserProfile, updateUserProfile }
