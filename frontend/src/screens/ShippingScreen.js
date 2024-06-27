@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import { saveShippingAddress } from '../actions/cartActions'
+import CheckoutSteps from '../components/CheckoutSteps'
 
 const ShippingScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const ShippingScreen = ({ history }) => {
   }
   return (
     <FormContainer>
+      <CheckoutSteps step1 step2 />
       <h2 style={{ fontSize: '48px'}}>Shipping Address</h2>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='address'>
