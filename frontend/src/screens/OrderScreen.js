@@ -2,76 +2,90 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button, ListGroup, Row, Col, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { getOrderDetails } from '../actions/orderActions'
 import Message from '../components/Message'
-import CheckoutSteps from '../components/CheckoutSteps'
-import { createOrder } from '../actions/orderActions'
+import Loader from '../components/Loader'
 
-const PlaceOrderScreen = ( { history } ) => {
+const OrderScreen = ({ match }) => {
+  const orderId = match.params.id
   const dispatch = useDispatch()
-  const cart = useSelector((state) => state.cart)
 
-  //Calculating price
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2)
-  }
-  
-  cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-  )
+  const orderDetails = useSelector((state) => state.orderDetails)
+  const { order, loading, error } = orderDetails
 
-  cart.shippingPrice = addDecimals(cart.itemsPrice > 5000 ? 0 : 20)
-
-  cart.totalPrice = addDecimals(
-    Number(cart.itemsPrice) + Number(cart.shippingPrice)
-  )
-  
-  const orderCreate = useSelector((state) => state.orderCreate)
-
-  const { order, success, error } = orderCreate
-  useEffect(() => {
-    if(success) {
-      history.push(`/order/${order._id}`)
+  //Calculate the price
+  if (!loading) {
+    const addDecimals = (num) => {
+      return (Math.round(num * 100) / 100).toFixed(2)
     }
-    // eslint-disable-next-line
-  }, [history, success])
-
-  //Submit order function
-  const placeOrderHandler = () => {
-    dispatch(createOrder({orderItems: cart.cartItems,
-                          shippingAddress: cart.shippingAddress,
-                          paymentMethod: cart.paymentMethod,
-                          itemsPrice: cart.itemsPrice,
-                          shippingPrice: cart.shippingPrice,
-                          totalPrice: cart.totalPrice}))
+    order.itemsPrice = addDecimals(
+      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    )
   }
-  return (
+  useEffect(() => {
+    if (!order || order._id !== orderId) dispatch(getOrderDetails(orderId))
+    // eslint-disable-next-line
+  }, [order, orderId])
+
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant='danger'>{error}</Message>
+  ) : (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <h1 style={{ fontSize: '36px'}}>Order Number：{order._id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Shipping Address</h2>
               <p>
-                <strong>Recipient Address: </strong>
-                {cart.shippingAddress.province},{cart.shippingAddress.city},
-                {cart.shippingAddress.address},{cart.shippingAddress.postalCode}
+                <strong>Recipient Address：</strong>
               </p>
+              <p>
+                {order.shippingAddress.province}, 
+                {order.shippingAddress.city}, 
+                {order.shippingAddress.address}, 
+                {order.shippingAddress.postalCode}
+              </p>
+              <p>
+                <strong>Name: </strong>
+                {order.user.name}
+              </p>
+              <p>
+                {' '}
+                <strong>Email: </strong>
+                <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
+              </p>
+              {order.isDelivered ? (
+                <Message variant='success'>
+                  Delivery Time：{order.DeliveredAt}
+                </Message>
+              ) : (
+                <Message variant='danger'>Not Shipped</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Way of Payment：</strong>
-              {cart.paymentMethod}
+              <p>
+                <strong>Way of Payment: </strong>
+                {order.paymentMethod}
+              </p>
+              {order.isPaid ? (
+                <Message variant='success'>Payment Time：{order.PaidAt}</Message>
+              ) : (
+                <Message variant='danger'>Unpaid</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Product Order</h2>
-              {cart.cartItems.length === 0 ? (
+              {order.orderItems.length === 0 ? (
                 <Message>Empty Cart</Message>
               ) : (
                 <ListGroup variant='flush'>
-                  {cart.cartItems.map((item, index) => (
+                  {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
@@ -108,33 +122,20 @@ const PlaceOrderScreen = ( { history } ) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Product Price</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping Fee</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total Price</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>${order.totalPrice}</Col>
                 </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                {error && <Message variant='danger'>{error}</Message>}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  onClick={placeOrderHandler}
-                  disabled={cart.cartItems === 0}
-                >
-                  Submit Order
-                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>
@@ -144,4 +145,4 @@ const PlaceOrderScreen = ( { history } ) => {
   )
 }
 
-export default PlaceOrderScreen
+export default OrderScreen
