@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
     res.send('The server is running')
 })
 
+//Get PayPal's clientID
+app.get('/api/config/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID)
+})
+
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
