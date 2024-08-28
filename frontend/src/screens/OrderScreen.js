@@ -4,10 +4,10 @@ import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
 import { Form, Button, ListGroup, Row, Col, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetails, payOrder } from '../actions/orderActions'
+import { getOrderDetails, payOrder, deliverOrder } from '../actions/orderActions'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { ORDER_PAY_RESET } from '../constants/orderConstants'
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../constants/orderConstants'
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
@@ -24,6 +24,8 @@ const OrderScreen = ({ match, history }) => {
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, error: errorPay, success: successPay } = orderPay
 
+  const orderDeliver = useSelector((state) => state.orderDeliver)
+  const { loading: loadingDeliver, error: errorDeliver, success: successDeliver } = orderDeliver
 
   //Calculate the price
   if (!loading) {
@@ -50,8 +52,9 @@ const OrderScreen = ({ match, history }) => {
     if (!userInfo) {
       history.push('/login')
     }
-    if (!order || order._id !== orderId || successPay) {
+    if (!order || order._id !== orderId || successPay || successDeliver) {
       dispatch({ type: ORDER_PAY_RESET })
+      dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -60,11 +63,15 @@ const OrderScreen = ({ match, history }) => {
         setSDK(true)
       }
     }
-  }, [dispatch, history, userInfo, order, orderId, successPay])
+  }, [dispatch, history, userInfo, order, orderId, successPay, successDeliver])
 
-  //Function to create PayPal payment btn
+  //Create a function for PayPal payment btn
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult))
+  }
+  //Create a function for clicking on the shipping btn
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order))
   }
 
   return loading ? (
@@ -99,7 +106,7 @@ const OrderScreen = ({ match, history }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
-                  Delivery Time：{order.DeliveredAt}
+                  Delivery Time：{order.deliveredAt}
                 </Message>
               ) : (
                 <Message variant='danger'>Not Shipped</Message>
@@ -177,20 +184,34 @@ const OrderScreen = ({ match, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                {order.paymentMethod === 'PayPal' && (
-                  <ListGroup.Item>
-                    {!SDK ? (
-                      <Loader />
-                    ) : (
-                      <PayPalButton
-                        amount={order.totalPrice}
-                        onSuccess={successPaymentHandler}
-                      ></PayPalButton>
-                    )}
-                  </ListGroup.Item>
-                )}
-              </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {order.paymentMethod === 'PayPal' && !SDK ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    ></PayPalButton>
+                  )}
+                </ListGroup.Item>
+              )}
+              {/* shipping btn */}
+              {userInfo &&
+              userInfo.isAdmin &&
+              order.isPaid &&
+              !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type='button'
+                    className='btn-block'
+                    onClick={deliverHandler}
+                  >
+                    Shipping Order
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
