@@ -6,6 +6,9 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_LIST_FAIL,
+    ORDER_LIST_MY_FAIL,
+    ORDER_LIST_MY_REQUEST,
+    ORDER_LIST_MY_SUCCESS,
     ORDER_LIST_REQUEST,
     ORDER_LIST_SUCCESS,
     ORDER_PAY_FAIL,
@@ -139,6 +142,35 @@ export const payOrder = (orderId, paymentResult) => async (
     dispatch({
       type: ORDER_PAY_FAIL,
       payload: message,
+    })
+  }
+}
+
+//Get the action of the logged-in user's order
+export const listMyOrder = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ORDER_LIST_MY_REQUEST })
+
+    //Get user information after successful login
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/orders/myOrders`, config)
+    dispatch({ type: ORDER_LIST_MY_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: ORDER_LIST_MY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     })
   }
 }
