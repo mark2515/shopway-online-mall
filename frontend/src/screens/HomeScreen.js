@@ -6,6 +6,7 @@ import { listProducts } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Paginate from '../components/Paginate'
+import Meta from '../components/Meta'
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
@@ -18,6 +19,7 @@ const HomeScreen = ({ match }) => {
   }, [dispatch, keyword, pageNumber])
   return (
     <>
+      <Meta />
       <h1>New Product</h1>
       {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : 
       (
