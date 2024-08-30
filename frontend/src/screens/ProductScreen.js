@@ -12,7 +12,7 @@ import {
   Form
 } from 'react-bootstrap'
 import { listProductDetails, createProductReview } from '../actions/productActions'
-import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import { PRODUCT_CREATE_REVIEW_RESET, PRODUCT_DETAILS_RESET } from '../constants/productConstants'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Rating from '../components/Rating'
@@ -50,6 +50,7 @@ const ProductScreen = ({history, match}) => {
     ) {
       dispatch(listProductDetails(match.params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
+      dispatch({ type: PRODUCT_DETAILS_RESET })
     }
     // eslint-disable-next-line 
   }, [dispatch, match, successProductReview])
