@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
+import { Navbar, Nav, Container, NavDropdown, Dropdown } from 'react-bootstrap'
 import { logout } from '../actions/userActions'
 import SearchBox from './SearchBox'
 
@@ -44,17 +44,17 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>)}
                 {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin Panel' id='adminmenu'>
-                  <LinkContainer to='/admin/userList'>
-                    <NavDropdown.Item>User List</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/productList'>
-                    <NavDropdown.Item>Product List</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/orderList'>
-                    <NavDropdown.Item>Order List</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Admin Panel
+                  </Dropdown.Toggle>
+          
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="/admin/userList">User List</Dropdown.Item>
+                    <Dropdown.Item href="/admin/productList">Product List</Dropdown.Item>
+                    <Dropdown.Item href="/admin/orderList">Order List</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               )}
             </Nav>
           </Navbar.Collapse>
