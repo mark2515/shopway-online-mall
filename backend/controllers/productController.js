@@ -48,7 +48,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 })
 
-//@desc    create product
+//@desc    create products
 //@route   POST/api/products
 //@access  private (administrators only)
 const createProduct = asyncHandler(async (req, res) => {

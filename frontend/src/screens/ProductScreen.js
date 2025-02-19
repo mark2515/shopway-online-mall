@@ -183,7 +183,7 @@ const ProductScreen = ({history, match}) => {
                     </Form>
                   ) : (
                     <Message>
-                      Please<Link to='/login'> log in </Link>before adding a comment.
+                      Please <Link to='/login'>log in</Link> before adding a comment.
                     </Message>
                   )}
                 </ListGroup.Item>
