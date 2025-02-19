@@ -61,7 +61,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Label>Name：</Form.Label>
             <Form.Control
               type='name'
-              placeholder='please enter name'
+              placeholder='please enter your name'
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>
@@ -70,7 +70,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Label>Email Address：</Form.Label>
             <Form.Control
               type='email'
-              placeholder='please enter email'
+              placeholder='please enter your email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></Form.Control>
@@ -79,7 +79,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Label>Password：</Form.Label>
             <Form.Control
               type='password'
-              placeholder='please enter password'
+              placeholder='please enter your password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
@@ -88,7 +88,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Label>Confirm Password：</Form.Label>
             <Form.Control
               type='password'
-              placeholder='please confirm password'
+              placeholder='please confirm your password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>

@@ -162,7 +162,7 @@ const ProductScreen = ({history, match}) => {
                           onChange={(e) => setRating(e.target.value)}
                         >
                           <option value=''>Select rating...</option>
-                          <option value='1'>1 - Very dissatisfied</option>
+                          <option value='1'>1 - Very Dissatisfied</option>
                           <option value='2'>2 - Dissatisfied</option>
                           <option value='3'>3 - Neutral</option>
                           <option value='4'>4 - Satisfied</option>

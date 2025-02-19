@@ -1,5 +1,5 @@
 # shopway-online-mall
-Welcome to ShopWay! [Visit Site](https://shopway-4c77d3b0a927.herokuapp.com/)
+Shop Smart, Live Better with ShopWay. [Visit Site](https://shopway-4c77d3b0a927.herokuapp.com/)
 
 # Development Environment
 - React 17.0.1

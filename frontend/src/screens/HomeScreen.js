@@ -20,7 +20,7 @@ const HomeScreen = ({ match }) => {
   return (
     <>
       <Meta />
-      <h1>New Product</h1>
+      <h1>New Products</h1>
       {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : 
       (
         <>

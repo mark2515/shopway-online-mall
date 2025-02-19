@@ -110,7 +110,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Name：</Form.Label>
             <Form.Control
               type='name'
-              placeholder='Please enter product name'
+              placeholder='Please enter the product name'
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>
@@ -119,7 +119,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Price：</Form.Label>
             <Form.Control
               type='number'
-              placeholder='Please enter product price'
+              placeholder='Please enter the product price'
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             ></Form.Control>
@@ -128,7 +128,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Image：</Form.Label>
             <Form.Control
               type='text'
-              placeholder='Please enter image path'
+              placeholder='Please enter the image path'
               value={image}
               onChange={(e) => setImage(e.target.value)}
             ></Form.Control>
@@ -144,7 +144,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Brand：</Form.Label>
             <Form.Control
               type='text'
-              placeholder='Please enter product brand'
+              placeholder='Please enter the product brand'
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
             ></Form.Control>
@@ -153,7 +153,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Inventory：</Form.Label>
             <Form.Control
               type='number'
-              placeholder='Please enter product inventory'
+              placeholder='Please enter the product inventory'
               value={countInStock}
               onChange={(e) => setCountInStock(e.target.value)}
             ></Form.Control>
@@ -162,7 +162,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Category：</Form.Label>
             <Form.Control
               type='text'
-              placeholder='Please enter product category'
+              placeholder='Please enter the product category'
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             ></Form.Control>
@@ -171,7 +171,7 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Label>Description：</Form.Label>
             <Form.Control
               type='text'
-              placeholder='Please enter product description'
+              placeholder='Please enter the product description'
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></Form.Control>
