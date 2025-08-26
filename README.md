@@ -1,5 +1,7 @@
 # shopway-online-mall
-Shop Smart, Live Better with ShopWay. [Visit Site](https://shopway-4c77d3b0a927.herokuapp.com/)
+- Developed an e-commerce platform using the MERN stack, enabling product display, keyword search, and cart management; Utilized React Hooks for dynamic UI adjustments, achieving responsive design features.
+- Architected a centralized Redux state system to manage user, cart, and checkout workflows; Implemented async thunks for API coordination, enabling efficient data fetching and a consistent UX across login, order placement, and shipping screens.
+- Implemented secure user authentication using bcrypt password hashing, JWT tokens and role-based admin access control.
 
 # Development Environment
 - React 17.0.1
